@@ -6,7 +6,7 @@ from pathlib import Path
 import mmap
 from secrets import token_bytes
 
-from fileTestSuite.unittest import FileTestSuiteTestCaseMixin
+from fileTestSuite.unittest import FTSTestClass, GeneratedTestProgram
 
 thisDir = Path(__file__).resolve().absolute().parent
 repoRootDir = thisDir.parent
@@ -19,9 +19,9 @@ dict = OrderedDict
 from pkexplode import decompress, decompressBytesChunkedToBytes, decompressStreamToBytes
 
 
-class Tests(unittest.TestCase, FileTestSuiteTestCaseMixin):
-	@property
-	def fileTestSuiteDir(self) -> Path:
+class PkExplodeTestClass(FTSTestClass):
+	@classmethod
+	def getFileTestSuiteDir(cls) -> Path:
 		return thisDir / "testDataset"
 
 	def _testProcessorImpl(self, challFile: Path, respFile: Path, paramsDict=None) -> None:
@@ -41,10 +41,6 @@ class Tests(unittest.TestCase, FileTestSuiteTestCaseMixin):
 	def _testChallengeResponsePair(self, chall, resp):
 		self._testPack(chall, resp)
 
-		#with mmap.mmap(-1, len(chall), access=mmap.ACCESS_READ|mmap.ACCESS_WRITE) as mm:
-		#	mm.write(chall)
-		#	mm.seek(0)
-		#	self._testPack(mm, resp)
 
-if __name__ == '__main__':
-	unittest.main()
+if __name__ == "__main__":
+	GeneratedTestProgram(PkExplodeTestClass)
